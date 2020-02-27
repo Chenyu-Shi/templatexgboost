@@ -11,18 +11,18 @@ HOME_DIR = os.getcwd() + "/../../../"
 flags = OE_ENCLAVE_FLAG_RELEASE
 
 # Uncomment below for enclave debug mode
-#  flags |= OE_ENCLAVE_FLAG_DEBUG
+flags |= OE_ENCLAVE_FLAG_DEBUG
 
 # Uncomment below for enclave simulation mode
-#  flags |= OE_ENCLAVE_FLAG_SIMULATE
+flags |= OE_ENCLAVE_FLAG_SIMULATE
 
 enclave = xgb.Enclave(HOME_DIR + "build/enclave/xgboost_enclave.signed", flags=(flags))
 crypto = xgb.CryptoUtils()
 
 # Remote Attestation
 print("Remote attestation")
-enclave.get_remote_report_with_pubkey()
-enclave.verify_remote_report_and_set_pubkey()
+# enclave.get_remote_report_with_pubkey()
+# enclave.verify_remote_report_and_set_pubkey()
 
 print("Creating training matrix")
 dtrain = xgb.DMatrix(HOME_DIR + "demo/data/agaricus.txt.train.enc", encrypted=True)
