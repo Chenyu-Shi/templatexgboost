@@ -328,7 +328,7 @@ int get_remote_report_with_pubkey(
   }
 
   return ret;
-} 
+}
 
 /**
  * Attest the given remote report and accompanying data. It consists of the
@@ -442,6 +442,20 @@ int verify_remote_report_and_set_pubkey(
 
 int add_client_key(uint8_t* data, size_t len, uint8_t* signature, size_t sig_len) {
     EnclaveContext::getInstance().decrypt_and_save_client_key(data, len, signature, sig_len);
+    return 0;
+}
+
+int add_client_key_with_certificate(long user_id,
+        uint8_t* user_public_key,
+        size_t user_public_key_len,
+        uint8_t* public_key_signature,
+        size_t public_key_signature_len,
+        uint8_t* data,
+        size_t data_len,
+        uint8_t* signature,
+        size_t sig_len) {
+    EnclaveContext::getInstance().decrypt_and_save_client_key_with_certificate(user_id, user_public_key, user_public_key_len,
+      public_key_signature, public_key_signature_len,data, data_len, signature, sig_len);
     return 0;
 }
 #endif // __ENCLAVE__

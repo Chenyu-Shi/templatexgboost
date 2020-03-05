@@ -161,7 +161,7 @@ XGB_DLL int XGBCreateEnclave(const char *enclave_image, uint32_t flags, int log_
  */
 XGB_DLL int XGDMatrixCreateFromFile(const char *fname,
                                     int silent,
-                                    DMatrixHandle *out); 
+                                    DMatrixHandle *out);
 
 #if defined(__SGX__)
 /*!
@@ -633,7 +633,7 @@ XGB_DLL int XGBoosterLoadRabitCheckpoint(
  */
 XGB_DLL int XGBoosterSaveRabitCheckpoint(BoosterHandle handle);
 
-#if defined(__SGX__) 
+#if defined(__SGX__)
 XGB_DLL int get_remote_report_with_pubkey(
     uint8_t** pem_key,
     size_t* key_size,
@@ -648,6 +648,18 @@ XGB_DLL int verify_remote_report_and_set_pubkey(
 
 XGB_DLL int add_client_key(
     //char* fname,
+    uint8_t* data,
+    size_t data_len,
+    uint8_t* signature,
+    size_t sig_len);
+
+XGB_DLL int add_client_key_with_certificate(
+    //char* fname,
+    long user_id,
+    uint8_t* user_public_key,
+    size_t user_public_key_len,
+    uint8_t* public_key_signature,
+    size_t public_key_signature_len,
     uint8_t* data,
     size_t data_len,
     uint8_t* signature,

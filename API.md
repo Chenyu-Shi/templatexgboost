@@ -18,17 +18,17 @@ Below we list the functions we currently support. Please follow the respective l
 > * create_enclave: boolean
 >> * whether you want to start an enclave. For example, if you just want to perform remote attestation as a client, there's no need to start an enclave on your client machine, but you will need to instantiate an enclave object to call the remote attestation methods.
 
-**Enclave.get_remote_report_with_pubkey()** 
+**Enclave.get_remote_report_with_pubkey()**
 
 > Retrieve the attestation report from the enclave
 
 > *Note: This function should be called by the client (but run on the server) to perform remote attestation.*
 
-**Enclave.verify_remote_report_and_set_pubkey()** 
+**Enclave.verify_remote_report_and_set_pubkey()**
 
 > Using the retrieved attestation report, verify that the enclave can be trusted.
 
-> *Note: this function should be run on the client after calling `get_remote_report_with_pubkey()`.* 
+> *Note: this function should be run on the client after calling `get_remote_report_with_pubkey()`.*
 
 
 ## CryptoUtils
@@ -50,7 +50,11 @@ The below functions would normally be run on the server.
 
 **add_client_key(data_filename, key, key_size, signature, signature_length)**
 
-> Store the key used to encrypt a specific data file and check that the key was sent by the client
+> Store the key used to encrypt a specific data file and check that the key was sent by the client. Only applicable to single user case.
+
+**add_client_key_with_certificate( user_id, user_public_key, user_public_key_len ,public_key_signature, public_key_signature_len, key, key_size, signature, sig_lennth)**
+
+> Store the key used to encrypt a user's data file and check that the key was sent by the client by verifying the certificate. Applies to multiple users
 
 ## DMatrix
 [**DMatrix(data)**](https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.DMatrix)
@@ -72,4 +76,4 @@ The below functions would normally be run on the server.
 
 [**Booster.predict()**](https://xgboost.readthedocs.io/en/latest/python/python_api.html#xgboost.Booster.predict)
 
-We are continuing to add support for more functions. If you'd like any specific functions, please file an issue. 
+We are continuing to add support for more functions. If you'd like any specific functions, please file an issue.

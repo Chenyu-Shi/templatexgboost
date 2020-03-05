@@ -1287,6 +1287,11 @@ XGB_DLL int add_client_key(uint8_t* data, size_t data_len, uint8_t* signature, s
   safe_ecall(enclave_add_client_key(Enclave::getInstance().getEnclave(), &Enclave::getInstance().enclave_ret, data, data_len, signature, sig_len));
 }
 
+XGB_DLL int add_client_key_with_certificate(long user_id, uint8_t* user_public_key, size_t user_public_key_len, uint8_t* public_key_signature, size_t public_key_signature_len, uint8_t* data, size_t data_len, uint8_t* signature, size_t sig_len) {
+    // FIXME return value / error handling
+  safe_ecall(enclave_add_client_key_with_certificate(Enclave::getInstance().getEnclave(), &Enclave::getInstance().enclave_ret, user_id, user_public_key, user_public_key_len, public_key_signature, public_key_signature_len,data, data_len, signature, sig_len));
+}
+
 XGB_DLL int encrypt_data_with_pk(char* data, size_t len, uint8_t* pem_key, size_t key_size, uint8_t* encrypted_data, size_t* encrypted_data_size) {
   bool result = false;
   mbedtls_pk_context key;
@@ -1352,7 +1357,7 @@ XGB_DLL int sign_data(char *keyfile, uint8_t* data, size_t data_size, uint8_t* s
 
   mbedtls_entropy_init( &m_entropy_context );
   mbedtls_pk_init( &pk );
-  mbedtls_ctr_drbg_init( &m_ctr_drbg_context ); 
+  mbedtls_ctr_drbg_init( &m_ctr_drbg_context );
 
   unsigned char hash[32];
   int ret = 1;
@@ -1481,7 +1486,7 @@ XGB_DLL int encrypt_file_with_keybuf(char* fname, char* e_fname, char* key) {
             exit(1);
         }
         std::string encoded = dmlc::data::base64_encode(iv, CIPHER_IV_SIZE);
-        myfile 
+        myfile
             << index << ","
             << dmlc::data::base64_encode(iv, CIPHER_IV_SIZE) << ","
             << dmlc::data::base64_encode(tag, CIPHER_TAG_SIZE) << ","

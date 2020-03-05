@@ -16,14 +16,14 @@ enclave {
                 [out] DMatrixHandle *out);
 
         public int enclave_XGBoosterCreate(
-                [in, count=len] const DMatrixHandle* dmats, 
-                bst_ulong len, 
+                [in, count=len] const DMatrixHandle* dmats,
+                bst_ulong len,
                 [out] BoosterHandle* out);
 
         public int enclave_XGBoosterSetParam(
                 BoosterHandle handle,
                 [in, string] const char *name,
-                [in, string] const char *value); 
+                [in, string] const char *value);
 
         public int enclave_XGBoosterUpdateOneIter(
                 BoosterHandle handle,
@@ -52,7 +52,7 @@ enclave {
                 unsigned ntree_limit,
                 [out] bst_ulong *out_len,
                 [out] uint8_t **out_result);
-        
+
         public int enclave_XGDMatrixGetFloatInfo(
                 DMatrixHandle handle,
                 [in, string] const char* field,
@@ -99,7 +99,7 @@ enclave {
         public int enclave_XGBoosterLoadModel(
                 BoosterHandle handle,
                 [in, string] const char* fname);
-        
+
         public int enclave_XGBoosterSaveModel(
                 BoosterHandle handle,
                 [in, string] const char* fname);
@@ -121,20 +121,31 @@ enclave {
                 BoosterHandle handle);
 
         public int enclave_get_remote_report_with_pubkey(
-                [out] uint8_t **pem_key, 
+                [out] uint8_t **pem_key,
                 [out] size_t *key_size,
                 [out] uint8_t **remote_report,
                 [out] size_t  *remote_report_size);
 
         public int enclave_verify_remote_report_and_set_pubkey(
-                [in, count=key_size] uint8_t *pem_key, 
+                [in, count=key_size] uint8_t *pem_key,
                 size_t key_size,
                 [in, count=remote_report_size] uint8_t *remote_report,
                 size_t remote_report_size);
 
         public int enclave_add_client_key(
-                [in, size=data_len] uint8_t* data, 
-                size_t data_len, 
+                [in, size=data_len] uint8_t* data,
+                size_t data_len,
+                [in, size=sig_len] uint8_t* signature,
+                size_t sig_len);
+
+        public int enclave_add_client_key_with_certificate(
+                long user_id,
+                [in, size=public_key_len] uint8_t* user_public_key,
+                size_t public_key_len,
+                [in, size=public_key_signature_len] uint8_t* public_key_signature,
+                size_t public_key_signature_len,
+                [in, size=data_len] uint8_t* data,
+                size_t data_len,
                 [in, size=sig_len] uint8_t* signature,
                 size_t sig_len);
 
@@ -150,4 +161,3 @@ enclave {
                 [user_check] const char *msg);
     };
 };
-
