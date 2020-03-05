@@ -14,14 +14,14 @@ class EnclaveContext {
     uint8_t m_public_key[CIPHER_PK_SIZE];
     uint8_t m_private_key[CIPHER_PK_SIZE];
 
-    // FIXME use array of fixed length instead of vector
-    //std::unordered_map<std::string, std::vector<uint8_t>> client_keys;
     uint8_t client_key[CIPHER_KEY_SIZE];
     bool client_key_is_set;
 
-    // new version of this
+    // new version of client keys
     std::unordered_map<long, std::vector<uint8_t>> client_public_keys;
     std::unordered_map<long, std::vector<uint8_t>> client_keys;
+
+    long activeuser = 0;
 
     EnclaveContext() {
       generate_public_key();
@@ -62,10 +62,16 @@ class EnclaveContext {
     //}
 
     bool get_client_key(uint8_t* key) {
-      if (client_key_is_set)
-          memcpy(key, client_key, CIPHER_KEY_SIZE);
-      else
-          memset(key, 0, CIPHER_KEY_SIZE);
+      if (client_key_is_set){
+          memcpy(key, client_key, CIPHER_KEY_SIZE)};
+      else{
+          if (activeuser!=0){
+            memset(key,client_keys[activeuser], CIPHER_KEY_SIZE);
+          }
+          else{
+            memset(key, 0, CIPHER_KEY_SIZE);
+          }
+        }
     }
 
     // FIXME verify client identity using root CA
@@ -279,6 +285,8 @@ class EnclaveContext {
 
       std::vector<uint8_t> v_p(user_public_key, user_public_key_len + CIPHER_KEY_SIZE);
       client_public_keys.insert({user_id, v_p});
+      // setting the current active user to have this id
+      activeuser = user_id;
 
       return true;
     }
