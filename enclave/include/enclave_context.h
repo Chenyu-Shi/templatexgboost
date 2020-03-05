@@ -63,10 +63,11 @@ class EnclaveContext {
 
     bool get_client_key(uint8_t* key) {
       if (client_key_is_set){
-          memcpy(key, client_key, CIPHER_KEY_SIZE)};
+          memcpy(key, client_key, CIPHER_KEY_SIZE);
+        }
       else{
           if (activeuser!=0){
-            memset(key,client_keys[activeuser], CIPHER_KEY_SIZE);
+            memcpy(key,(uint8_t *) &client_keys[activeuser][0], CIPHER_KEY_SIZE);
           }
           else{
             memset(key, 0, CIPHER_KEY_SIZE);
@@ -106,8 +107,7 @@ class EnclaveContext {
 
       mbedtls_rsa_set_padding(mbedtls_pk_rsa(_pk_context), MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA256);
 
-      if((ret = compute_sha256(
-        , data_len, hash)) != 0) {
+      if((ret = compute_sha256(data, data_len, hash)) != 0) {
         LOG(INFO) << "verification failed -- Could not hash";
         return false;
       }
@@ -212,7 +212,7 @@ class EnclaveContext {
       // round two
       mbedtls_pk_init(&_pk_context);
 
-      if((ret = mbedtls_pk_parse_public_key(&_pk_context, (const unsigned char*) user_public_key, strlen(user_public_key) + 1)) != 0) {
+      if((ret = mbedtls_pk_parse_public_key(&_pk_context, (unsigned char*) user_public_key, strlen((char*)user_public_key) + 1)) != 0) {
         LOG(INFO) << "verification failed - Could not read key";
         LOG(INFO) << "verification failed - mbedtls_pk_parse_public_keyfile returned" << ret;
         return false;
@@ -283,7 +283,7 @@ class EnclaveContext {
       std::vector<uint8_t> v(output, output + CIPHER_KEY_SIZE);
       client_keys.insert({user_id, v});
 
-      std::vector<uint8_t> v_p(user_public_key, user_public_key_len + CIPHER_KEY_SIZE);
+      std::vector<uint8_t> v_p(user_public_key, user_public_key + user_public_key_len);
       client_public_keys.insert({user_id, v_p});
       // setting the current active user to have this id
       activeuser = user_id;
