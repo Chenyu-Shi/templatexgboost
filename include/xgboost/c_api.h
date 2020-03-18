@@ -173,7 +173,8 @@ XGB_DLL int XGDMatrixCreateFromFile(const char *fname,
  */
 XGB_DLL int XGDMatrixCreateFromEncryptedFile(const char *fname,
         int silent,
-        DMatrixHandle *out);
+        DMatrixHandle *out,
+        char* username);
 #endif
 
 /*!
@@ -464,7 +465,8 @@ XGB_DLL int XGBoosterPredict(BoosterHandle handle,
                              unsigned ntree_limit,
                              bst_ulong *out_len,
 #ifdef __SGX__
-                             uint8_t **out_result);
+                             uint8_t **out_result,
+                           char* username);
 #else
                              const float **out_result);
 #endif
@@ -476,15 +478,18 @@ XGB_DLL int XGBoosterPredict(BoosterHandle handle,
 * \return 0 when success, -1 when failure happens
  */
 XGB_DLL int XGBoosterLoadModel(BoosterHandle handle,
-                               const char *fname);
+                               const char *fname,
+                             char * username);
 /*!
  * \brief save model into existing file
  * \param handle handle
  * \param fname file name
+ *\param username
  * \return 0 when success, -1 when failure happens
  */
 XGB_DLL int XGBoosterSaveModel(BoosterHandle handle,
-                               const char *fname);
+                               const char *fname,
+                             char* username);
 /*!
  * \brief load model from in memory buffer
  * \param handle handle
@@ -494,7 +499,8 @@ XGB_DLL int XGBoosterSaveModel(BoosterHandle handle,
  */
 XGB_DLL int XGBoosterLoadModelFromBuffer(BoosterHandle handle,
                                          const void *buf,
-                                         bst_ulong len);
+                                         bst_ulong len,
+                                       char* username);
 /*!
  * \brief save model into binary raw bytes, return header of the array
  * user must copy the result out, before next xgboost call
@@ -505,7 +511,8 @@ XGB_DLL int XGBoosterLoadModelFromBuffer(BoosterHandle handle,
  */
 XGB_DLL int XGBoosterGetModelRaw(BoosterHandle handle,
                                  bst_ulong *out_len,
-                                 const char **out_dptr);
+                                 const char **out_dptr,
+                               char* username);
 /*!
  * \brief dump model, return array of strings representing model dump
  * \param handle handle

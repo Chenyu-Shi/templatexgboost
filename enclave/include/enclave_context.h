@@ -68,11 +68,11 @@ class EnclaveContext {
     //  }
     //}
 
-    bool get_client_key(uint8_t* key, std::string username) {
+    bool get_client_key(uint8_t* key, char * username) {
 
       // returning the key held by user
 
-      memcpy(key,(uint8_t *) &client_keys[username][0], CIPHER_KEY_SIZE);
+      memcpy(key,(uint8_t *) &client_keys[CharPtrToString(username)][0], CIPHER_KEY_SIZE);
     }
 
     // FIXME verify client identity using root CA
@@ -322,6 +322,16 @@ class EnclaveContext {
     }
     return s;
 }
+
+std::string CharPtrToString(char* a) {
+  int i;
+  std::string s = "";
+  for (i = 0; a[i] != (char) 0; i++) {
+      s = s + a[i];
+  }
+  return s;
+}
+
 
   private:
     /**

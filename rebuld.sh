@@ -2,7 +2,7 @@ mkdir -p build
 
 pushd build
 cmake ..
-makke -j4
+make -j4
 popd
 
 pushd python-package
