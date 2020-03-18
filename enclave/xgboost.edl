@@ -14,7 +14,7 @@ enclave {
                 [in, string] const char *fname,
                 int silent,
                 [out] DMatrixHandle *out,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGBoosterCreate(
                 [in, count=len] const DMatrixHandle* dmats,
@@ -53,7 +53,7 @@ enclave {
                 unsigned ntree_limit,
                 [out] bst_ulong *out_len,
                 [out] uint8_t **out_result,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGDMatrixGetFloatInfo(
                 DMatrixHandle handle,
@@ -101,24 +101,24 @@ enclave {
         public int enclave_XGBoosterLoadModel(
                 BoosterHandle handle,
                 [in, string] const char* fname,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGBoosterSaveModel(
                 BoosterHandle handle,
                 [in, string] const char* fname,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGBoosterGetModelRaw(
                 BoosterHandle handle,
                 [out] bst_ulong *out_len,
                 [out] char **out_dptr,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGBoosterLoadModelFromBuffer(
                 BoosterHandle handle,
                 [in, size=len] const void* buf,
                 bst_ulong len,
-                [in, string] const char* username);
+                [in, string] char* username);
 
         public int enclave_XGDMatrixFree(
                 DMatrixHandle handle);
