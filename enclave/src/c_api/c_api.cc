@@ -445,17 +445,13 @@ int add_client_key(uint8_t* data, size_t len, uint8_t* signature, size_t sig_len
     return 0;
 }
 
-int add_client_key_with_certificate(long user_id,
-        uint8_t* user_public_key,
-        size_t user_public_key_len,
-        uint8_t* public_key_signature,
-        size_t public_key_signature_len,
+int add_client_key_with_certificate(char * cert,
+        int cert_len,
         uint8_t* data,
         size_t data_len,
         uint8_t* signature,
         size_t sig_len) {
-    EnclaveContext::getInstance().decrypt_and_save_client_key_with_certificate(user_id, user_public_key, user_public_key_len,
-      public_key_signature, public_key_signature_len,data, data_len, signature, sig_len);
+    EnclaveContext::getInstance().decrypt_and_save_client_key_with_certificate(cert, cert_len,data, data_len, signature, sig_len);
     return 0;
 }
 #endif // __ENCLAVE__
@@ -497,7 +493,8 @@ int XGDMatrixCreateFromEncryptedFile(const char *fname,
 #ifdef __ENCLAVE__ // pass decryption key
     // FIXME consistently use uint8_t* for key bytes
     char key[CIPHER_KEY_SIZE];
-    EnclaveContext::getInstance().get_client_key((uint8_t*) key);
+    std::string username= "user1";
+    EnclaveContext::getInstance().get_client_key((uint8_t*) key, username);
     //EnclaveContext::getInstance().get_client_key(fname, (uint8_t*) key);
     *out = new std::shared_ptr<DMatrix>(DMatrix::Load(fname, silent != 0, load_row_split, true, key));
 #else
@@ -1260,7 +1257,9 @@ XGB_DLL int XGBoosterPredict(BoosterHandle handle,
   //*out_result = result;
 
   unsigned char key[CIPHER_KEY_SIZE];
-  EnclaveContext::getInstance().get_client_key((uint8_t*)key);
+
+  std::string username= "user1";
+  EnclaveContext::getInstance().get_client_key((uint8_t*) key, username);
 
   int preds_len = preds.size()*sizeof(float);
   size_t buf_len = CIPHER_IV_SIZE + CIPHER_TAG_SIZE + preds_len;
@@ -1333,7 +1332,9 @@ XGB_DLL int XGBoosterSaveModel(BoosterHandle handle, const char* fname) {
   unsigned char* tag = buf + CIPHER_IV_SIZE;
   unsigned char* output = tag + CIPHER_TAG_SIZE;
   unsigned char key[CIPHER_KEY_SIZE];
-  EnclaveContext::getInstance().get_client_key((uint8_t*)key);
+
+  std::string username= "user1";
+  EnclaveContext::getInstance().get_client_key((uint8_t*) key, username);
 
   encrypt_symm(
       key,
@@ -1371,7 +1372,8 @@ XGB_DLL int XGBoosterLoadModelFromBuffer(BoosterHandle handle,
   unsigned char* data = tag + CIPHER_TAG_SIZE;
   unsigned char* output = (unsigned char*) malloc (len);
   unsigned char key[CIPHER_KEY_SIZE];
-  EnclaveContext::getInstance().get_client_key((uint8_t*)key);
+  std::string username= "user1";
+  EnclaveContext::getInstance().get_client_key((uint8_t*) key, username);
 
   decrypt_symm(
       key,
@@ -1413,7 +1415,8 @@ XGB_DLL int XGBoosterGetModelRaw(BoosterHandle handle,
   unsigned char* tag = buf + CIPHER_IV_SIZE;
   unsigned char* output = tag + CIPHER_TAG_SIZE;
   unsigned char key[CIPHER_KEY_SIZE];
-  EnclaveContext::getInstance().get_client_key((uint8_t*)key);
+  std::string username= "user1";
+  EnclaveContext::getInstance().get_client_key((uint8_t*) key, username);
 
   encrypt_symm(
       key,

@@ -139,11 +139,8 @@ enclave {
                 size_t sig_len);
 
         public int enclave_add_client_key_with_certificate(
-                long user_id,
-                [in, size=public_key_len] uint8_t* user_public_key,
-                size_t public_key_len,
-                [in, size=public_key_signature_len] uint8_t* public_key_signature,
-                size_t public_key_signature_len,
+                [in, size = cert_len] char * cert,
+                int cert_len,
                 [in, size=data_len] uint8_t* data,
                 size_t data_len,
                 [in, size=sig_len] uint8_t* signature,

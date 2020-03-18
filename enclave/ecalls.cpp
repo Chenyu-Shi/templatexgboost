@@ -213,17 +213,14 @@ int enclave_add_client_key(
 }
 
 int enclave_add_client_key_with_certificate(
-        long user_id,
-        uint8_t* user_public_key,
-        size_t user_public_key_len,
-        uint8_t* public_key_signature,
-        size_t public_key_signature_len,
+        char * cert,
+        int cert_len,
         uint8_t* data,
         size_t data_len,
         uint8_t* signature,
         size_t sig_len) {
     fprintf(stdout, "Ecall: add_client_key_with_certificate !\n");
-    return add_client_key_with_certificate(user_id, user_public_key, user_public_key_len, public_key_signature, public_key_signature_len,data, data_len, signature, sig_len);
+    return add_client_key_with_certificate(cert, cert_len, data, data_len, signature, sig_len);
 }
 
 // FIXME: check bounds

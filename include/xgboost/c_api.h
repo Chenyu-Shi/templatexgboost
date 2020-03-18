@@ -655,11 +655,8 @@ XGB_DLL int add_client_key(
 
 XGB_DLL int add_client_key_with_certificate(
     //char* fname,
-    long user_id,
-    uint8_t* user_public_key,
-    size_t user_public_key_len,
-    uint8_t* public_key_signature,
-    size_t public_key_signature_len,
+    char* cert,
+    int cert_len,
     uint8_t* data,
     size_t data_len,
     uint8_t* signature,

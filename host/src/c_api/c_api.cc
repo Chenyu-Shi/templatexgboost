@@ -1287,9 +1287,9 @@ XGB_DLL int add_client_key(uint8_t* data, size_t data_len, uint8_t* signature, s
   safe_ecall(enclave_add_client_key(Enclave::getInstance().getEnclave(), &Enclave::getInstance().enclave_ret, data, data_len, signature, sig_len));
 }
 
-XGB_DLL int add_client_key_with_certificate(long user_id, uint8_t* user_public_key, size_t user_public_key_len, uint8_t* public_key_signature, size_t public_key_signature_len, uint8_t* data, size_t data_len, uint8_t* signature, size_t sig_len) {
+XGB_DLL int add_client_key_with_certificate(char * cert,int cert_len, uint8_t* data, size_t data_len, uint8_t* signature, size_t sig_len) {
     // FIXME return value / error handling
-  safe_ecall(enclave_add_client_key_with_certificate(Enclave::getInstance().getEnclave(), &Enclave::getInstance().enclave_ret, user_id, user_public_key, user_public_key_len, public_key_signature, public_key_signature_len,data, data_len, signature, sig_len));
+  safe_ecall(enclave_add_client_key_with_certificate(Enclave::getInstance().getEnclave(), &Enclave::getInstance().enclave_ret,cert,cert_len,data, data_len, signature, sig_len));
 }
 
 XGB_DLL int encrypt_data_with_pk(char* data, size_t len, uint8_t* pem_key, size_t key_size, uint8_t* encrypted_data, size_t* encrypted_data_size) {
